@@ -7,6 +7,7 @@ const Navbar = () => {
     const navLinks = <>
         <li><Link to="/">Home</Link></li>
         <li><Link to="/about">About</Link></li>
+        
     </>
     return (
         <div className="navbar bg-base-100  mb-5 shadow-sm">
@@ -31,7 +32,9 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
-                <a className="btn">Button</a>
+                <Link to={'/login'}>
+                    <button className='btn btn-active'>Login</button>
+                </Link>
             </div>
         </div>
     );
