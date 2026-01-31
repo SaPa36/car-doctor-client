@@ -31,11 +31,15 @@ const Navbar = () => {
                     {navLinks}
                 </ul>
             </div>
-            <div className="navbar-end">
+            <div className="navbar-end gap-5">
                 <Link to={'/login'}>
                     <button className='btn btn-active'>Login</button>
                 </Link>
+                <Link to={'/register'}>
+                    <button className='btn btn-active'>Register</button>
+                </Link>
             </div>
+            
         </div>
     );
 };

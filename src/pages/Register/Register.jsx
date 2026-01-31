@@ -1,13 +1,12 @@
 import React from "react";
 
-import login from "../../assets/images/login/login.svg";
+import login from "../../assets/images/login/login.svg"
 import { Link } from "react-router-dom";
 
-const Login = () => {
+const Register = () => {
 
-    const handleLogin = e =>{
+    const handleRegister = e =>{
         e.preventDefault();
-
     }
   return (
     <div className="hero bg-base-200 min-h-screen">
@@ -17,11 +16,15 @@ const Login = () => {
         </div>
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
           <div className="card-body">
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handleRegister}>
               <fieldset className="fieldset">
-                <h1 className="text-5xl font-bold">Login now!</h1>
+                <h1 className="text-5xl font-bold">Register now!</h1>
+                <label className="label">Name</label>
+                <input type="text" name="name" className="input" placeholder="Name" />
+
                 <label className="label">Email</label>
                 <input type="email" name="email" className="input" placeholder="Email" />
+
                 <label className="label">Password</label>
                 <input
                   type="password"
@@ -39,9 +42,9 @@ const Login = () => {
                 />
 
                 <p>
-                  Are you new here? Please
-                  <Link to={"/register"}>
-                    <span className="text-blue-400 font-bold"> Register</span>
+                  Already Have an account?
+                  <Link to={"/login"}>
+                    <span className="text-blue-400 font-bold"> Login</span>
                   </Link>
                 </p>
               </fieldset>
@@ -53,4 +56,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
