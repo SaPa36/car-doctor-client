@@ -1,12 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import login from "../../assets/images/login/login.svg"
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../provider/AuthProvider";
 
 const Register = () => {
 
+    const {createUser } = useContext(AuthContext);
+
     const handleRegister = e =>{
         e.preventDefault();
+        const form = e.target;
+        const name = form.name.value;
+        const email = form.email.value;
+        const password = form.password.value;
+
+        console.log(name, email, password);
+
+        createUser(email, password) 
+        .then(result => {
+            const user = result.user;
+            console.log(user);
+        })
+        .catch(error => console.log(error))
+
     }
   return (
     <div className="hero bg-base-200 min-h-screen">
@@ -38,7 +55,7 @@ const Register = () => {
                 <input
                   className="btn btn-primary"
                   type="submit"
-                  value="Login"
+                  value="Register"
                 />
 
                 <p>
