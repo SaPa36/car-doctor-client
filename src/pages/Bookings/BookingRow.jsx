@@ -1,15 +1,15 @@
-import React from 'react';
 
-const BookingRow = ({ booking }) => {
+
+const BookingRow = ({ booking, handleDelete }) => {
 
     const { _id, service, price, date, img } = booking;
+
+ 
 
     return (
         <tr>
             <th>
-                <label>
-                    <input type="checkbox" className="checkbox" />
-                </label>
+                <button onClick={() => handleDelete(_id)} className="btn btn-error btn-xs">X</button>
             </th>
             <td>
                 <div className="flex items-center gap-3">
