@@ -16,6 +16,9 @@ const Navbar = () => {
     const navLinks = <>
         <li><Link to="/">Home</Link></li>
         <li><Link to="/about">About</Link></li>
+        {
+            user && <li><Link to="/bookings">My Bookings</Link></li>
+        }
 
     </>
     return (
