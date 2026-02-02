@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import login from "../../assets/images/login/login.svg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../provider/AuthProvider";
+import axios from "axios";
 
 const Login = () => {
 
@@ -22,9 +23,16 @@ const Login = () => {
 
         signIn(email, password) 
         .then(result => {
-            const user = result.user;
-            console.log(user);
-            navigate(from, { replace: true });
+            const loggedInUser = result.user;
+            console.log(loggedInUser);
+            const user = { email };
+            //navigate(from, { replace: true });
+
+            //get jwt token
+            axios.post('http://localhost:5000/jwt', user)
+            .then(res => {
+                console.log(res.data);
+            });
         })
         .catch(error => console.log(error))
 
