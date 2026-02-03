@@ -7,36 +7,41 @@ import axios from "axios";
 
 const Login = () => {
 
-    const {signIn} = useContext(AuthContext);
-    const navigate = useNavigate();
-    const location = useLocation();
-    console.log(location);
-    const from = location.state?.from?.pathname || '/';
+  const { signIn } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location);
+  const from = location.state?.from?.pathname || '/';
 
-    const handleLogin = e =>{
-        e.preventDefault();
-        const form = e.target;
-        const email = form.email.value;
-        const password = form.password.value;
+  const handleLogin = e => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
 
-        console.log( email, password);
+    console.log(email, password);
 
-        signIn(email, password) 
-        .then(result => {
-            const loggedInUser = result.user;
-            console.log(loggedInUser);
-            const user = { email };
-            //navigate(from, { replace: true });
+    signIn(email, password)
+      .then(result => {
+        const loggedInUser = result.user;
+        console.log(loggedInUser);
+        const user = { email };
 
-            //get jwt token
-            axios.post('http://localhost:5000/jwt', user)
-            .then(res => {
-                console.log(res.data);
-            });
-        })
-        .catch(error => console.log(error))
 
-    }
+        //get jwt token
+        //get jwt token
+        axios.post('http://localhost:5000/jwt', user, { withCredentials: true })
+          .then(res => {
+            console.log(res.data);
+            if (res.data.success) {
+              //localStorage.setItem('car-doctor-access-token', res.data.token);
+              navigate(from, { replace: true });
+            }
+          });
+      })
+      .catch(error => console.log(error))
+
+  }
   return (
     <div className="hero bg-base-200 min-h-screen">
       <div className="hero-content flex-col lg:flex-row">

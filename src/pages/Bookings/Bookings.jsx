@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../provider/AuthProvider';
 import BookingRow from './BookingRow';
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 const Bookings = () => {
     const { user } = useContext(AuthContext);
@@ -10,13 +11,19 @@ const Bookings = () => {
     const url = `http://localhost:5000/bookings?email=${user?.email}`;
 
     useEffect(() => {
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                setBookings(data);
+        // fetch(url)
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         console.log(data);
+        //         setBookings(data);
+        //     })
+
+        axios.get(url, { withCredentials: true })
+            .then(res => {
+                
+                setBookings(res.data);
             })
-    }, []);
+    }, [url]);
 
     const handleDelete = id => {
         // Wrap the configuration in curly braces {}
@@ -31,7 +38,8 @@ const Bookings = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 fetch(`http://localhost:5000/bookings/${id}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    
                 })
                     .then(res => res.json())
                     .then(data => {
@@ -54,6 +62,7 @@ const Bookings = () => {
     const handleBookingConfirm = id => {
         fetch(`http://localhost:5000/bookings/${id}`, {
             method: 'PATCH',
+            
             headers: {
                 'content-type': 'application/json'
             },
