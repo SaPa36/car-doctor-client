@@ -2,6 +2,7 @@ import React, {  createContext, useEffect, useState } from 'react';
 import auth from '../firebase/firebase.config';
 
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import axios from 'axios';
 
 export const AuthContext = createContext(null);
 
@@ -29,12 +30,30 @@ const AuthProvider = ({children}) => {
     }
 
 
-    useEffect(() =>{
-        const unsubscribe = onAuthStateChanged(auth, currentUser =>{
-            setUser(currentUser);
-            console.log('current User', currentUser);
-            setLoading(false)
-        })
+    useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, currentUser => {
+        setUser(currentUser);
+        console.log('Current User in State Observer', currentUser);
+        setLoading(false);
+
+        // 1. Check if currentUser exists before accessing .email
+        if (currentUser && currentUser.email) {
+            const loggedUser = { email: currentUser.email };
+            
+            // This is the "Automatic" part you wanted!
+            // Every time the user logs in or refreshes, a new token is fetched.
+            axios.post('http://localhost:5000/jwt', loggedUser, { withCredentials: true })
+                .then(res => {
+                    console.log('Token response:', res.data);
+                });
+        } else {
+            // 2. Optional: Clear the cookie on the server side when user logs out
+            axios.post('http://localhost:5000/logout', {} , { withCredentials: true })
+                .then(res => {
+                    console.log('Logged out from server');
+                });
+        }
+    });
         return() =>{
             return unsubscribe();
         }
