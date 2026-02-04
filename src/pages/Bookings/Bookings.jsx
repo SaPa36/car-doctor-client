@@ -8,7 +8,7 @@ import useAxiosSecure from '../../hooks/useAxiosSecure';
 const Bookings = () => {
     const { user } = useContext(AuthContext);
     const [bookings, setBookings] = useState([]);
-    const AxiosSecure = useAxiosSecure();
+    const axiosSecure = useAxiosSecure();
 
     const url = `/bookings?email=${user?.email}`;
 
@@ -29,12 +29,11 @@ const Bookings = () => {
     //         })
     // }, [url]);
 
-    AxiosSecure.get(url)
+    axiosSecure.get(url)
         .then(res => {
             setBookings(res.data);
         })
-    }, [url, AxiosSecure]);
-
+    }, [url, axiosSecure]);
 
     const handleDelete = id => {
         // Wrap the configuration in curly braces {}
