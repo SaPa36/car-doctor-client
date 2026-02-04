@@ -3,12 +3,16 @@ import { AuthContext } from '../../provider/AuthProvider';
 import BookingRow from './BookingRow';
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const Bookings = () => {
     const { user } = useContext(AuthContext);
     const [bookings, setBookings] = useState([]);
+    const AxiosSecure = useAxiosSecure();
 
-    const url = `http://localhost:5000/bookings?email=${user?.email}`;
+    const url = `/bookings?email=${user?.email}`;
+
+    //const url = `http://localhost:5000/bookings?email=${user?.email}`;
 
     useEffect(() => {
         // fetch(url)
@@ -18,12 +22,19 @@ const Bookings = () => {
         //         setBookings(data);
         //     })
 
-        axios.get(url, { withCredentials: true })
-            .then(res => {
+    //     axios.get(url, { withCredentials: true })
+    //         .then(res => {
                 
-                setBookings(res.data);
-            })
-    }, [url]);
+    //             setBookings(res.data);
+    //         })
+    // }, [url]);
+
+    AxiosSecure.get(url)
+        .then(res => {
+            setBookings(res.data);
+        })
+    }, [url, AxiosSecure]);
+
 
     const handleDelete = id => {
         // Wrap the configuration in curly braces {}
