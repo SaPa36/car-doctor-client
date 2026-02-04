@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../provider/AuthProvider';
 import BookingRow from './BookingRow';
 import Swal from 'sweetalert2';
-import axios from 'axios';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const Bookings = () => {
@@ -12,31 +11,16 @@ const Bookings = () => {
 
     const url = `/bookings?email=${user?.email}`;
 
-    //const url = `https://car-doctor-server-lemon-two.vercel.app/bookings?email=${user?.email}`;
-
     useEffect(() => {
-        // fetch(url)
-        //     .then(res => res.json())
-        //     .then(data => {
-        //         console.log(data);
-        //         setBookings(data);
-        //     })
-
-    //     axios.get(url, { withCredentials: true })
-    //         .then(res => {
-                
-    //             setBookings(res.data);
-    //         })
-    // }, [url]);
-
-    axiosSecure.get(url)
-        .then(res => {
-            setBookings(res.data);
-        })
-    }, [url, axiosSecure]);
+        if (user?.email) {
+            axiosSecure.get(url)
+                .then(res => {
+                    setBookings(res.data);
+                })
+        }
+    }, [url, axiosSecure, user?.email]);
 
     const handleDelete = id => {
-        // Wrap the configuration in curly braces {}
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -47,42 +31,30 @@ const Bookings = () => {
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`https://car-doctor-server-lemon-two.vercel.app/bookings/${id}`, {
+                fetch(`http://localhost:5000/bookings/${id}`, {
                     method: 'DELETE',
-                    
                 })
                     .then(res => res.json())
                     .then(data => {
                         if (data.deletedCount > 0) {
-                            Swal.fire(
-                                'Deleted!',
-                                'Your booking has been deleted.',
-                                'success'
-                            );
+                            Swal.fire('Deleted!', 'Your booking has been deleted.', 'success');
                             const remaining = bookings.filter(booking => booking._id !== id);
                             setBookings(remaining);
-
                         }
                     })
-
             }
         })
     }
 
     const handleBookingConfirm = id => {
-        fetch(`https://car-doctor-server-lemon-two.vercel.app/bookings/${id}`, {
+        fetch(`http://localhost:5000/bookings/${id}`, {
             method: 'PATCH',
-            
-            headers: {
-                'content-type': 'application/json'
-            },
+            headers: { 'content-type': 'application/json' },
             body: JSON.stringify({ status: 'confirm' })
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
                 if (data.modifiedCount > 0) {
-                    // update state
                     const remaining = bookings.filter(booking => booking._id !== id);
                     const updated = bookings.find(booking => booking._id === id);
                     updated.status = 'confirm';
@@ -91,39 +63,34 @@ const Bookings = () => {
                 }
             })
     }
-    return (
-        <div>
-            <h2>Bookings: {bookings.length}</h2>
 
-            <div className="overflow-x-auto">
-                <table className="table">
-                    {/* head */}
-                    <thead>
+    return (
+        <div className="container mx-auto px-4 py-10">
+            <h2 className="text-3xl font-bold mb-5">Total Bookings: {bookings.length}</h2>
+
+            {/* FIX: overflow-x-auto allows swiping on mobile */}
+            <div className="overflow-x-auto w-full shadow-xl rounded-xl border border-base-300">
+                <table className="table w-full">
+                    <thead className="bg-base-200 text-base">
                         <tr>
-                            <th></th>
+                            <th>Action</th>
                             <th>Image</th>
                             <th>Date</th>
                             <th>Service</th>
                             <th>Price</th>
-                            <th></th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-
-                        {
-                            bookings.map(booking => <BookingRow 
+                        {bookings.map(booking => (
+                            <BookingRow 
                                 key={booking._id} 
                                 booking={booking} 
                                 handleDelete={handleDelete}
                                 handleBookingConfirm={handleBookingConfirm}
-                                ></BookingRow>)
-                        }
-
-
-
+                            />
+                        ))}
                     </tbody>
-                    {/* foot */}
-
                 </table>
             </div>
         </div>
