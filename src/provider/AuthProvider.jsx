@@ -42,13 +42,13 @@ const AuthProvider = ({children}) => {
             
             // This is the "Automatic" part you wanted!
             // Every time the user logs in or refreshes, a new token is fetched.
-            axios.post('http://localhost:5000/jwt', loggedUser, { withCredentials: true })
+            axios.post('https://car-doctor-server-lemon-two.vercel.app/jwt', loggedUser, { withCredentials: true })
                 .then(res => {
                     console.log('Token response:', res.data);
                 });
         } else {
             // 2. Optional: Clear the cookie on the server side when user logs out
-            axios.post('http://localhost:5000/logout', {} , { withCredentials: true })
+            axios.post('https://car-doctor-server-lemon-two.vercel.app/logout', {} , { withCredentials: true })
                 .then(res => {
                     console.log('Logged out from server');
                 });

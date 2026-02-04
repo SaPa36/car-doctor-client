@@ -12,7 +12,7 @@ const Login = () => {
 
   const { signIn } = useAuth();
 
-  
+
   const navigate = useNavigate();
   const location = useLocation();
   console.log(location);
@@ -35,7 +35,7 @@ const Login = () => {
 
         //get jwt token
         //get jwt token
-        axios.post('http://localhost:5000/jwt', user, { withCredentials: true })
+        axios.post('https://car-doctor-server-lemon-two.vercel.app/jwt', user, { withCredentials: true })
           .then(res => {
             console.log(res.data);
             if (res.data.success) {
