@@ -5,11 +5,22 @@ import Swal from 'sweetalert2';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const Bookings = () => {
-    const { user } = useContext(AuthContext);
+    const { user, loading } = useContext(AuthContext);
     const [bookings, setBookings] = useState([]);
     const axiosSecure = useAxiosSecure();
 
     const url = `/bookings?email=${user?.email}`;
+
+    useEffect(() => {
+        // ONLY fetch if loading is finished AND we have a user email
+        if (!loading && user?.email) {
+            axiosSecure.get(`/bookings?email=${user?.email}`)
+                .then(res => setBookings(res.data))
+                .catch(err => console.error("Interceptor caught an error", err));
+        }
+    }, [user, loading, axiosSecure]);
+
+    if (loading) return <div className="text-center py-20">Loading...</div>;
 
     useEffect(() => {
         if (user?.email) {
